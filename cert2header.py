@@ -1,0 +1,52 @@
+from string import Template
+import binascii
+from cryptography import x509
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.backends import default_backend
+import sys
+
+def make_sublist_group(lst: list, grp: int) -> list:
+    """
+    Group list elements into sublists.
+    make_sublist_group([1, 2, 3, 4, 5, 6, 7], 3) = [[1, 2, 3], [4, 5, 6], 7]
+    """
+    return [lst[i:i+grp] for i in range(0, len(lst), grp)]
+
+def do_convension(content: bytes) -> str:
+    hexstr = binascii.hexlify(content).decode("UTF-8")
+    hexstr = hexstr.upper()
+    array = ["0x" + hexstr[i:i + 2] + "" for i in range(0, len(hexstr), 2)]
+    array = make_sublist_group(array, 10)
+    
+    return sum(len(a) for a in array ), "\n".join([", ".join(e) + ", " for e in array])
+
+
+#Creating a Certificate
+
+
+with open(sys.argv[1], "rb") as certfile:
+    certData=certfile.read()
+    cert = x509.load_pem_x509_certificate(certData, default_backend())
+    
+cert_der = cert.public_bytes(serialization.Encoding.DER)
+cer_length , cerArray=do_convension(cert_der)
+
+certHeaderTemplate=Template("""
+/*GENERATED FILE*/
+
+#ifndef _CERTS_TEST_H_
+#define _CERTS_TEST_H_
+
+static const unsigned char ca_cert_der[] =
+{
+$caCert
+};
+
+/* size is $ceCertSize */
+static const int sizeof_ca_cert_der = sizeof(ca_cert_der);
+
+#endif /*_CERTS_TEST_H_*/
+""")
+
+with open('cert_header.h', 'w') as file: 
+    file.write(certHeaderTemplate.substitute(caCert=cerArray,ceCertSize=cer_length))
