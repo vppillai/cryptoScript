@@ -7,9 +7,10 @@ Some of the items below are sample commands that can be issued with existing pro
 |  Script Name   |                                                             Function                                                              |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | cert2header.py | Convert a certificate in PEM format into C header for use with embedded TLS stacks. Usage: python cert2header.py rootCert.cer     |
-| key2header.py  | Convert a key in PEM format into C header for use with embedded TLS stacks. Usage: python key2header.py privateKey.key     |
+| key2header.py  | Convert a key in PEM format into C header for use with embedded TLS stacks. Usage: python key2header.py privateKey.key            |
 | createCert.py  | Generate a self-signed certificate and key in PEM, DER and a C header file format.Can be used to spin up a local server for test. |
-|scan ciphers    |`pysslscan scan --scan=server.ciphers --ssl2 --ssl3 --tls10 --tls11 --tls12 test.mosquitto.org:8883`|
+| scan ciphers   |`pysslscan scan --scan=server.ciphers --ssl2 --ssl3 --tls10 --tls11 --tls12 test.mosquitto.org:8883`                               |
+| httpsServer    |A simple python script that can be used as a test HTTPs server                                                                     |
 
 ## openssl test server with debug
 
