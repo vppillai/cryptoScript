@@ -6,6 +6,7 @@ from cryptography import x509
 from cryptography.hazmat.backends import default_backend
 from base64 import b64decode, b16encode
 from cryptography.hazmat.primitives import serialization
+from cryptography.x509.oid import NameOID
 from pathlib import Path
 
 parser = ArgumentParser(description='extract device certificates from manifest without verification')
@@ -33,7 +34,10 @@ for i, signed_se in enumerate(manifest):
     for jwk in public_keys:
         for cert_b64 in jwk.get('x5c', []):
             cert = x509.load_der_x509_certificate(data=b64decode(cert_b64),backend=default_backend())
-            pemCert=(cert.public_bytes(encoding=serialization.Encoding.PEM).decode('ascii'))
-            with open("./certs/"+serial+".cer", 'w') as f:
-                f.write(pemCert)
-
+            cn = cert.subject.get_attributes_for_oid(NameOID.COMMON_NAME)[0].value
+            
+            #consider only the device cert if a chain is present.
+            if ('sn'+serial).lower() == cn.lower():
+                pemCert=(cert.public_bytes(encoding=serialization.Encoding.PEM).decode('ascii'))
+                with open("./certs/"+serial+".cer", 'w') as f:
+                    f.write(pemCert)
