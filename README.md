@@ -21,8 +21,27 @@ MSYS_NO_PATHCONV=1 openssl req -new -x509 -key ECC_prime256v1.key -out ECC_prime
 
 Curves can be listed with `openssl ecparam --list_curves`
 
+You can extract the public key from the certificate using 
+
+```bash
+openssl.exe ec -in ECC_prime256v1.key -pubout -out ECC_prime256v1.pub
+```
+
 > Note: MSYS_NO_PATHCONV is set to prevent gitbash from covnerting `/C` to path
 
+## signing a file
+
+You can geneate a signature using:
+
+```bash
+openssl dgst -sha256 -sign ECC_prime256v1.key -out sign.sha256 hello.txt
+```
+
+And, verify with
+
+```bash
+openssl dgst -sha256 -verify ECC_prime256v1.pub -signature sign.sha256 hello.txt
+```
 
 ## openssl test server with debug
 
