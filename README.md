@@ -28,7 +28,7 @@ openssl.exe ec -in ECC_prime256v1.key -pubout -out ECC_prime256v1.pub
 ```
 
 ```bash
- openssl x509 -pubkey -noout -in ECC_prime256v1.cer
+openssl x509 -pubkey -noout -in ECC_prime256v1.cer
 ```
 
 > Note: MSYS_NO_PATHCONV is set to prevent gitbash from covnerting `/C` to path
