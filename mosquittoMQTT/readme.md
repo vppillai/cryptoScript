@@ -24,3 +24,4 @@
     ```
 5.	`.\mosquitto.exe -c .\mosquitto.conf -v`
 
+6. Client command `mosquitto_sub -h localhost -p 8883 -t hello --cafile ./certs/ECC_prime256v1.cer --insecure -d`
