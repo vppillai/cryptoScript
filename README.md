@@ -14,6 +14,8 @@ Some of the items below are sample commands that can be issued with existing pro
 
 ## create self signed test certificates with
 
+### For ECC keys & Certs
+
 ```bash
 openssl ecparam -genkey -name prime256v1 -noout -out ECC_prime256v1.key
 MSYS_NO_PATHCONV=1 openssl req -new -x509 -key ECC_prime256v1.key -out ECC_prime256v1.cer -days 900000 -subj "/C=IN/ST=Kerala/L=Kollam/O=embeddedinn/CN=embeddedinn"
@@ -21,7 +23,7 @@ MSYS_NO_PATHCONV=1 openssl req -new -x509 -key ECC_prime256v1.key -out ECC_prime
 
 Curves can be listed with `openssl ecparam --list_curves`
 
-You can extract the public key from the certificate using one of the following 
+You can extract the public key from the certificate using one of the following :
 
 ```bash
 openssl.exe ec -in ECC_prime256v1.key -pubout -out ECC_prime256v1.pub
@@ -29,6 +31,21 @@ openssl.exe ec -in ECC_prime256v1.key -pubout -out ECC_prime256v1.pub
 
 ```bash
 openssl x509 -pubkey -noout -in ECC_prime256v1.cer
+```
+
+
+### For RSA keys & Certs
+
+```bash
+openssl genrsa -out RSA-private-key.pem 2048
+MSYS_NO_PATHCONV=1 openssl req -new -x509 -key RSA-private-key.pem -out RSA_Cert.cer -days 900000 -subj "/C=IN/ST=Kerala/L=Kollam/O=embeddedinn/CN=embeddedinn"
+```
+
+You can extract the public key from the certificate using:
+
+
+```bash
+openssl rsa -in private-key.pem -pubout -out public-key.pem
 ```
 
 > Note: MSYS_NO_PATHCONV is set to prevent gitbash from covnerting `/C` to path
