@@ -1,3 +1,12 @@
+
+# Online Tools
+
+|  Sl 	| Description  	| Link  	|
+| ---	  | ---	          | ---	    |
+|   1	  |        Convert your PEM encoded files into DER encoded header files to use in embedded systems     	|    https://vppillai.github.io/cryptoScript/CryptoHeaderGen.html   	|
+
+
+
 # Security test Scripts
 
 This repo contains a bunch of quick and dirty scripts that were written to meet very specific needs during the course of developing embedded projects. A lot of the code is a result of advanced google-fu and stack-overflow-ology.  So, no copyrights or guarantees.
@@ -11,6 +20,9 @@ Some of the items below are sample commands that can be issued with existing pro
 | createCert.py  | Generate a self-signed certificate and key in PEM, DER and a C header file format.Can be used to spin up a local server for test. |
 | scan ciphers   |`pysslscan scan --scan=server.ciphers --ssl2 --ssl3 --tls10 --tls11 --tls12 test.mosquitto.org:8883`                               |
 | httpsServer    |A simple python script that can be used as a test HTTPs server                                                                     |
+
+
+# Commands and one-line scripts
 
 ## create self signed test certificates with
 
