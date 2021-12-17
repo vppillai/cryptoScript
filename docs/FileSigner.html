@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tool to sign a file using ECC private key and webCrypto</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta author="Vysakh P Pillai">
+    <meta description="Tool to sign a file using ECC private key and webCrypto">
+
+    <script>
+        //generate a key pair using webCrypto
+        function generateKeyPair() {
+            var keyPair = window.crypto.subtle.generateKey({
+                name: "ECDSA",
+                namedCurve: "P-256"
+            }, true, ["sign", "verify"]);
+            keyPair.then(function (keys) {
+                displayKeyPair(keys);
+            }).catch(function (err) {
+                console.log(err);
+            });
+        }
+
+        //convert webCrypto key pair to PEM format and display it
+        function displayKeyPair(keyPair) {
+            window.crypto.subtle.exportKey("pkcs8", keyPair.privateKey).then(function (keyData) {
+                var pem = btoa(String.fromCharCode.apply(null, new Uint8Array(keyData)));
+                document.getElementById("privateKey").value = "-----BEGIN PRIVATE KEY-----\n" +
+                    pem.match(/.{1,64}/g).join("\n") +
+                    "\n-----END PRIVATE KEY-----";
+            }).catch(function (err) {
+                console.log(err);
+            });
+            window.crypto.subtle.exportKey("spki", keyPair.publicKey).then(function (keyData) {
+                var pem = btoa(String.fromCharCode.apply(null, new Uint8Array(keyData)));
+                document.getElementById("publicKey").value = "-----BEGIN PUBLIC KEY-----\n" +
+                    pem.match(/.{1,64}/g).join("\n") +
+                    "\n-----END PUBLIC KEY-----";
+            }).catch(function (err) {
+                console.log(err);
+            });
+        }
+
+        function base64StringToArrayBuffer(b64str) {
+            try {
+                let byteStr = atob(b64str);    
+            } catch (error) {
+                alert("Invalid Key. PKC#1 keys are not supported.");   
+            }
+
+            let bytes = new Uint8Array(byteStr.length);
+            for (let i = 0; i < byteStr.length; i++) {
+                bytes[i] = byteStr.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        function cleanupPem(pem) {
+            var lines = pem.split('\n');
+
+            var encoded = '';
+            for (var i = 0; i < lines.length; i++) {
+                if (lines[i].trim().length > 0 &&
+                    lines[i].indexOf('-BEGIN PUBLIC KEY-') < 0 &&
+                    lines[i].indexOf('-BEGIN PRIVATE KEY-') < 0 &&
+                    lines[i].indexOf('-END PRIVATE KEY-') < 0 &&
+                    lines[i].indexOf('-END PUBLIC KEY-') < 0
+                ){
+                    encoded += lines[i].trim();
+                }
+            }
+            return base64StringToArrayBuffer(encoded);
+        }
+
+        //convert PEM format keys from page into webcrypto key pair
+        function importKeyPair() {
+            var privateKeyArray = cleanupPem(document.getElementById("privateKey").value);
+            var publicKeyArray = cleanupPem(document.getElementById("publicKey").value);
+
+            if (privateKeyArray.byteLength != 0) {
+                var privateKeyImport = window.crypto.subtle.importKey("pkcs8", privateKeyArray, {
+                    name: "ECDSA",
+                    namedCurve: "P-256"
+                }, true, ["sign"]);
+            }
+            if (publicKeyArray.byteLength != 0) {
+                var publicKeyImport = window.crypto.subtle.importKey("spki", publicKeyArray, {
+                    name: "ECDSA",
+                    namedCurve: "P-256"
+                }, true, ["verify"]);
+            }
+
+            return Promise.all([privateKeyImport, publicKeyImport]);
+        }
+
+        //sign a file using webCrypto promise from importKeyPair. File is in file
+        function signFile() {
+            var file = document.getElementById("fileToSign").files[0];
+            var reader = new FileReader();
+            if (file == undefined) {
+                alert("No file selected!");
+                return;
+            }
+            reader.readAsArrayBuffer(file);
+            reader.onload = function (event) {
+                var data = event.target.result;
+                importKeyPair().then(function (keys) {
+                    //check if key is valid
+                    if (keys[0] == undefined) {
+                        alert("Invalid key! Please enter a valid private key for signing");
+                        return;
+                    }
+                    var sign = window.crypto.subtle.sign({
+                        name: "ECDSA",
+                        hash: {
+                            name: "SHA-256"
+                        }
+                    }, keys[0], data);
+
+                    sign.then(function (signature) {
+                        var signatureArray = new Uint8Array(signature);
+                        var signatureBase64 = btoa(String.fromCharCode.apply(null, signatureArray));
+                        document.getElementById("signature").value = signatureBase64;
+                        //emphasis signature in the textarea
+                        document.getElementById("signature").select();
+
+                    }).catch(function (err) {
+                       console.log("Error signing file: " + err);
+                    });
+                });
+            };
+        }
+
+        //verify a file using webCrypto promise from importKeyPair. File is in file
+        function verifyFile() {
+            var file = document.getElementById("fileToSign").files[0];
+            var reader = new FileReader();
+            //check if file is valid
+            if (file == undefined) {
+                alert("No file selected!");
+                return;
+            }
+            reader.readAsArrayBuffer(file);
+            reader.onload = function (event) {
+                var data = event.target.result;
+                importKeyPair().then(function (keys) {
+                    //check if key is valid
+                    if (keys[1] == undefined) {
+                        alert("Invalid key! Please enter a valid public key for verification");
+                        return;
+                    }
+                    var signature = base64StringToArrayBuffer(document.getElementById("signature").value);
+                    var verify = window.crypto.subtle.verify({
+                        name: "ECDSA",
+                        hash: {
+                            name: "SHA-256"
+                        }
+                    }, keys[1], signature, data);
+                    verify.then(function (result) {
+                        if (result) {
+                            alert("Signature is valid");
+                        } else {
+                            alert("Signature is invalid");
+                        }
+                    }).catch(function (err) {
+                        console.log("Error verifying file: " + err);
+                    });
+                }).catch(function (err) {
+                    console.log("Error importing key: " + err);
+                });
+            };
+        }
+
+        //handle file loading. Display file properties and hash in the page
+        function handleFileSelect(evt) {
+            var files = evt.target.files;
+            var file = files[0];
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var fileContent = e.target.result;
+                var hash = window.crypto.subtle.digest({
+                    name: "SHA-256"
+                }, fileContent);
+                hash.then(function (hash) {
+                    var hashArray = new Uint8Array(hash);
+                    var hashHex = Array.prototype.map.call(hashArray, function (e) {
+                        return ("00" + e.toString(16)).slice(-2);
+                    }).join("");
+
+                    fileDetails =
+                        `File Name: ${file.name}\nFile Size: \t${file.size} bytes\nFile Type: \t${file.type}\nFile Hash: \t${hashHex}`;
+                    document.getElementById("fileDetails").innerHTML = fileDetails;
+                }).catch(function (err) {
+                    console.log("Error hashing file: " + err);
+                });
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        //clear all the fields in the page on load
+        function clearAll() {
+            document.getElementById("fileToSign").value = "";
+            document.getElementById("fileDetails").innerHTML = "";
+            document.getElementById("signature").value = "";
+            document.getElementById("publicKey").value = "";
+            document.getElementById("privateKey").value = "";
+        }
+    </script>
+</head>
+
+<body onload="clearAll()">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Tool to sign a file using ECC private key and webCrypto</h1>
+                <small>Supports only P-256 ECDSA with SHA-256 </small>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <h3>Step 1: Generate an ECC key pair or paste your keys below</h3>
+                <hr>
+                <button type="button" class="fas fa-key btn btn-primary" onclick="generateKeyPair()"> Generate Key
+                    Pair</button>
+                <p></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="privateKey">Private Key</label>
+                <textarea id="privateKey" class="form-control" rows="10"
+                    placeholder="Paste your private key in PEM format here"></textarea>
+                <small>For signing, only the private key is required</small><br>
+                <small><i>PKCS#1 keys are not supported.</i></small>
+            </div>
+            <div class="col-md-6">
+                <label for="publicKey">Public Key</label>
+                <textarea id="publicKey" class="form-control" rows="10"
+                    placeholder="Paste your public key in PEM format here"></textarea>
+                <small>For verification, only the public key is required</small>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <h3>Step 2: Sign or verify a file</h3>
+                <hr>
+                <label for="fileToSign">File to sign / Verify</label>
+                <input type="file" class="form-control-file" id="fileToSign" onchange="handleFileSelect(event)">
+            </div>
+        </div>
+
+        <div class="row mt-4" id="signatureMaterial">
+            <div class="col-md-8">
+                <textarea id="fileDetails" class="form-control" style="font-size: 10px;" rows="4"
+                    placeholder="File Details" readonly></textarea><br>
+                <button type="button" class="fas fa-signature btn btn-primary" onclick="signFile()"> Sign File</button>
+            </div>
+            <div class="col-md-4">
+                <textarea id="signature" class="form-control" style="font-size: 10px;" rows="4"
+                    placeholder="Signature in base64 format."></textarea>
+                <p></p>
+                <button type="button" class="fas fa-check-double btn btn-primary" onclick="verifyFile()"> Verify
+                    File</button><br>
+                <small> Make sure that you paste the base64 encoded signature here before verification</small>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
