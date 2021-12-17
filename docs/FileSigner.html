@@ -52,8 +52,9 @@
         }
 
         function base64StringToArrayBuffer(b64str) {
+            let byteStr=null
             try {
-                let byteStr = atob(b64str);
+                byteStr = atob(b64str);
             } catch (error) {
                 alert("Invalid Key. PKC#1 keys are not supported.");
             }
@@ -215,6 +216,24 @@
             document.getElementById("publicKey").value = "";
             document.getElementById("privateKey").value = "";
         }
+
+        //download a file with contents of a text area
+        function downloadFile(textArea, fileName) {
+            var fileContent = document.getElementById(textArea).value;
+            var blob = new Blob([fileContent], {
+                type: "application/x-pem-files"
+            });
+            if (window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveBlob(blob, fileName);
+            } else {
+                var elem = window.document.createElement('a');
+                elem.href = window.URL.createObjectURL(blob);
+                elem.download = fileName;
+                document.body.appendChild(elem);
+                elem.click();
+                document.body.removeChild(elem);
+            }
+        }
     </script>
 </head>
 
@@ -233,21 +252,23 @@
             <div class="col-md-8">
                 <h3>Step 1: Generate an ECC key pair or paste your keys below</h3>
                 <hr>
-                <button type="button" class="fas fa-key btn btn-primary" onclick="generateKeyPair()"> Generate Key
+                <button type="button" onclick="generateKeyPair()" class="btn btn-primary"><span class="fas fa-key btn btn-primary"></span> Generate Key
                     Pair</button>
                 <p></p>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <label for="privateKey">Private Key</label>
+                <label for="privateKey" ><h5><u>Private Key</u></h5></label>
+                <div class="fas fa-download btn text-success" style="float:right;" onclick="downloadFile('privateKey','privateKey.pem')"> download</div>
                 <textarea id="privateKey" class="form-control" rows="10"
                     placeholder="Paste your private key in PEM format here"></textarea>
                 <small>For signing, only the private key is required</small><br>
                 <small><i>PKCS#1 keys are not supported.</i></small>
             </div>
             <div class="col-md-6">
-                <label for="publicKey">Public Key</label>
+                <label for="publicKey"><h5><u>Public Key</u></h5></label>
+                <div class="fas fa-download btn text-success" style="float:right;" onclick="downloadFile('publicKey','publicKey.pem')"> download</div>
                 <textarea id="publicKey" class="form-control" rows="10"
                     placeholder="Paste your public key in PEM format here"></textarea>
                 <small>For verification, only the public key is required</small>
@@ -266,14 +287,14 @@
             <div class="col-md-8">
                 <textarea id="fileDetails" class="form-control" style="font-size: 10px;" rows="4"
                     placeholder="File Details" readonly></textarea><br>
-                <button type="button" class="fas fa-signature btn btn-primary" onclick="signFile()"> Sign File</button>
+                <button type="button" class="btn btn-warning rounded-pill" onclick="signFile()"> <span class="fas fa-signature"> Sign File</span></button>
             </div>
             <div class="col-md-4">
                 <textarea id="signature" class="form-control" style="font-size: 10px;" rows="4"
                     placeholder="Signature in base64 format."></textarea>
                 <p></p>
-                <button type="button" class="fas fa-check-double btn btn-primary" onclick="verifyFile()"> Verify
-                    File</button><br>
+                <button type="button" class="btn btn-success rounded-pill" onclick="verifyFile()"> <span class="fas fa-check-double"> Verify
+                    File </span></button><br>
                 <small> Make sure that you paste the base64 encoded signature here before verification</small>
             </div>
         </div>
