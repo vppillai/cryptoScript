@@ -220,6 +220,11 @@
         //download a file with contents of a text area
         function downloadFile(textArea, fileName) {
             var fileContent = document.getElementById(textArea).value;
+            //check if file content is empty
+            if (fileContent.length == 0) {
+                alert("No file content to download! Please generate keys first.");
+                return;
+            }
             var blob = new Blob([fileContent], {
                 type: "application/x-pem-files"
             });
