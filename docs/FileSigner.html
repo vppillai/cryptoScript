@@ -52,7 +52,7 @@
         }
 
         function base64StringToArrayBuffer(b64str) {
-            let byteStr=null
+            let byteStr = null
             try {
                 byteStr = atob(b64str);
             } catch (error) {
@@ -245,10 +245,11 @@
 <body onload="clearAll()">
     <div class="container">
         <div class="row">
-            <div class="col-md-12 mt-5">
+            <div class="col-md-12 mt-4">
                 <h1 class="text-center mb-3">Tool to sign a file using ECC private key and webCrypto</h1>
                 <small>Supports only P-256 ECDSA with SHA-256 </small>
-                <p style="text-align: end;" class="text-danger">This is a client side tool that uses webcrypto APIs. Your data is not transmit or stored.</p>
+                <p style="text-align: end;" class="text-danger">This is a client side tool that uses webcrypto APIs.
+                    Your data is not transmit or stored.</p>
                 <hr>
             </div>
         </div>
@@ -256,49 +257,64 @@
             <div class="col-md-8">
                 <h3>Step 1: Generate an ECC key pair or paste your keys below</h3>
                 <hr>
-                <button type="button" onclick="generateKeyPair()" class="btn btn-primary"><span class="fas fa-key btn btn-primary"></span> Generate Key
+                <button type="button" onclick="generateKeyPair()" class="btn btn-primary btn-sm"><span
+                        class="fas fa-key"></span> Generate Key
                     Pair</button>
                 <p></p>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <label for="privateKey" ><h5><u>Private Key</u></h5></label>
-                <div class="fas fa-download btn text-success" style="float:right;" onclick="downloadFile('privateKey','privateKey.pem')"> download</div>
-                <textarea id="privateKey" class="form-control" rows="10"
-                    placeholder="Paste your private key in PEM format here"></textarea>
+                <label for="privateKey">
+                    <h5><u>Private Key</u></h5>
+                </label>
+                <div class="fas fa-download btn text-success" style="float:right;"
+                    onclick="downloadFile('privateKey','privateKey.pem')"> download</div>
+                <textarea id="privateKey" class="form-control" rows="5"
+                    placeholder="Paste your private key in PEM format here OR Click on 'Generate Key Pair'"
+                    style="resize: none; font-size: 12px; font-family: Consolas,monaco,monospace; "></textarea>
                 <small>For signing, only the private key is required</small><br>
                 <small><i>PKCS#1 keys are not supported.</i></small>
             </div>
             <div class="col-md-6">
-                <label for="publicKey"><h5><u>Public Key</u></h5></label>
-                <div class="fas fa-download btn text-success" style="float:right;" onclick="downloadFile('publicKey','publicKey.pem')"> download</div>
-                <textarea id="publicKey" class="form-control" rows="10"
-                    placeholder="Paste your public key in PEM format here"></textarea>
+                <label for="publicKey">
+                    <h5><u>Public Key</u></h5>
+                </label>
+                <div class="fas fa-download btn text-success" style="float:right;"
+                    onclick="downloadFile('publicKey','publicKey.pem')"> download</div>
+                <textarea id="publicKey" class="form-control" rows="5"
+                    placeholder="Paste your public key in PEM format here OR Click on 'Generate Key Pair'"
+                    style="resize: none; font-size: 12px; font-family: Consolas,monaco,monospace; "></textarea>
                 <small>For verification, only the public key is required</small>
             </div>
         </div>
         <div class="row mt-5">
-            <div class="col-md-12">
+            <div class="col-md-8">
                 <h3>Step 2: Sign or verify a file</h3>
                 <hr>
-                <label for="fileToSign">File to sign / Verify</label>
+                <label for="fileToSign">Load file to sign / Verify</label><br>
                 <input type="file" class="form-control-file" id="fileToSign" onchange="handleFileSelect(event)">
             </div>
         </div>
 
         <div class="row mt-4" id="signatureMaterial">
             <div class="col-md-8">
-                <textarea id="fileDetails" class="form-control" style="font-size: 10px;" rows="4"
-                    placeholder="File Details" readonly></textarea><br>
-                <button type="button" class="btn btn-warning rounded-pill" onclick="signFile()"> <span class="fas fa-signature"> Sign File</span></button>
+                <div>
+                    <textarea id="fileDetails" class="form-control"
+                        style="font-size: 10px; resize: none; font-family: Consolas,monaco,monospace; " rows="4"
+                        placeholder="File Details" readonly></textarea><br>
+                </div>
+                <button type="button" class="btn btn-warning rounded-pill" onclick="signFile()"> <span
+                        class="fas fa-signature"> Sign File</span></button>
             </div>
             <div class="col-md-4">
-                <textarea id="signature" class="form-control" style="font-size: 10px;" rows="4"
+                <textarea id="signature" class="form-control"
+                    style="font-size: 10px; resize: none;font-family: Consolas,monaco,monospace; " rows="4"
                     placeholder="Signature in base64 format."></textarea>
                 <p></p>
-                <button type="button" class="btn btn-success rounded-pill" onclick="verifyFile()"> <span class="fas fa-check-double"> Verify
-                    File </span></button><br>
+                <button type="button" class="btn btn-success rounded-pill" onclick="verifyFile()"> <span
+                        class="fas fa-check-double"> Verify
+                        File </span></button><br>
                 <small> Make sure that you paste the base64 encoded signature here before verification</small>
             </div>
         </div>
