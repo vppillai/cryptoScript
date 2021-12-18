@@ -14,7 +14,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
         integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" />
     <meta author="Vysakh P Pillai">
     <meta description="Tool to sign a file using ECC private key and webCrypto">
 
@@ -240,6 +241,16 @@
                 document.body.removeChild(elem);
             }
         }
+
+        function dropFile(event) {
+            event.preventDefault();
+            file = event.dataTransfer.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                event.target.value = e.target.result;
+            };
+            reader.readAsText(file, "UTF-8");
+        }
     </script>
 </head>
 
@@ -248,7 +259,8 @@
         <div class="row">
             <div class="col-md-12 mt-4">
                 <h1 class="text-center mb-3">Tool to sign a file using ECC private key and webCrypto</h1>
-                <a class="github-fork-ribbon" href="https://github.com/vppillai/cryptoScript" target="blank" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
+                <a class="github-fork-ribbon" href="https://github.com/vppillai/cryptoScript" target="blank"
+                    data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
             </div>
         </div>
         <div class="row">
@@ -257,9 +269,12 @@
             </div>
             <div class="col-md-2"></div>
             <div class="col-md-6">
-                <p style="text-align: end;" class="text-danger small">This is a client side tool that uses webcrypto APIs.
+                <p style="text-align: end;" class="text-danger small">This is a client side tool that uses webcrypto
+                    APIs.
                     Your data is not transmit or stored.
-                <p style="text-align: end;" class="text-success small"><a href="https://github.com/vppillai/cryptoScript/blob/master/ecdsaSign.py"><i class="fab fa-github"></i> Find the python counterpart here </a></p>
+                    <p style="text-align: end;" class="text-success small"><a
+                            href="https://github.com/vppillai/cryptoScript/blob/master/ecdsaSign.py"><i
+                                class="fab fa-github"></i> Find the python counterpart here </a></p>
             </div>
         </div>
         <hr>
@@ -281,8 +296,9 @@
                 <div class="fas fa-download btn text-success" style="float:right;"
                     onclick="downloadFile('privateKey','privateKey.pem')"> download</div>
                 <textarea id="privateKey" class="form-control" rows="5"
-                    placeholder="Paste your private key in PEM format here OR Click on 'Generate Key Pair'"
-                    style="resize: none; font-size: 12px; font-family: Consolas,monaco,monospace; "></textarea>
+                    placeholder="Paste or drag and dop your private key in PEM format here OR Click on 'Generate Key Pair'"
+                    style="resize: none; font-size: 12px; font-family: Consolas,monaco,monospace; "
+                    ondragover="return false" ondrop="dropFile(event)"></textarea>
                 <small>For signing, only the private key is required</small><br>
                 <small><i>PKCS#1 keys are not supported.</i></small>
             </div>
@@ -294,7 +310,8 @@
                     onclick="downloadFile('publicKey','publicKey.pem')"> download</div>
                 <textarea id="publicKey" class="form-control" rows="5"
                     placeholder="Paste your public key in PEM format here OR Click on 'Generate Key Pair'"
-                    style="resize: none; font-size: 12px; font-family: Consolas,monaco,monospace; "></textarea>
+                    style="resize: none; font-size: 12px; font-family: Consolas,monaco,monospace; "
+                    ondragover="return false" ondrop="dropFile(event)"></textarea>
                 <small>For verification, only the public key is required</small>
             </div>
         </div>
@@ -325,7 +342,8 @@
                 <button type="button" class="btn btn-success rounded-pill" onclick="verifyFile()"> <span
                         class="fas fa-check-double"> Verify
                         File </span></button><br>
-                <small> Make sure that you paste the base64 encoded signature in r|s format here before verification</small>
+                <small> Make sure that you paste the base64 encoded signature in r|s format here before
+                    verification</small>
             </div>
         </div>
     </div>
