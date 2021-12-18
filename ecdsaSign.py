@@ -3,6 +3,12 @@
 # Version : 1.0
 # Description : Generate / Verify ECDSA signature
 
+# Accepts a PEM encoded key and a data file and generates a signature. 
+# The signature is the raw 64 bytes (r|s) in base64 encoded format. It is not ASN.1 encoded (DER/PEM)
+# If a signature is provided, the tool verifies the signature. 
+# A web version of this tool writen using webcrypto APIs can be found at https://vppillai.github.io/cryptoScript/FileSigner.html
+
+
 def main():
     import base64
     import ecdsa
