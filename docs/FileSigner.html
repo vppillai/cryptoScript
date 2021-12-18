@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
         integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" />
     <meta author="Vysakh P Pillai">
     <meta description="Tool to sign a file using ECC private key and webCrypto">
 
@@ -247,12 +248,21 @@
         <div class="row">
             <div class="col-md-12 mt-4">
                 <h1 class="text-center mb-3">Tool to sign a file using ECC private key and webCrypto</h1>
-                <small>Supports only P-256 ECDSA with SHA-256 </small>
-                <p style="text-align: end;" class="text-danger">This is a client side tool that uses webcrypto APIs.
-                    Your data is not transmit or stored.</p>
-                <hr>
+                <a class="github-fork-ribbon" href="https://github.com/vppillai/cryptoScript" target="blank" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-4">
+                <small>Supports only P-256 ECDSA with SHA-256 </small>
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-6">
+                <p style="text-align: end;" class="text-danger small">This is a client side tool that uses webcrypto APIs.
+                    Your data is not transmit or stored.
+                <p style="text-align: end;" class="text-success small"><a href="https://github.com/vppillai/cryptoScript/blob/master/ecdsaSign.py"><i class="fab fa-github"></i> Find the python counterpart here </a></p>
+            </div>
+        </div>
+        <hr>
         <div class="row">
             <div class="col-md-8">
                 <h3>Step 1: Generate an ECC key pair or paste your keys below</h3>
