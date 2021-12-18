@@ -23,9 +23,9 @@ Some of the items below are sample commands that can be issued with existing pro
 | httpsServer    |A simple python script that can be used as a test HTTPs server                                                                     |
 
 
-# Commands and one-line scripts
+# Commands and one-liners
 
-## create self signed test certificates with
+## Creating self signed test certificates
 
 ### For ECC keys & Certs
 
@@ -36,11 +36,20 @@ MSYS_NO_PATHCONV=1 openssl req -new -x509 -key ECC_prime256v1.key -out ECC_prime
 
 Curves can be listed with `openssl ecparam --list_curves`
 
+The Above command generates a PKCS#1 key. To convert it into a more generic PKCS#8 key, use:
+
+```bash
+openssl pkcs8 -in privateKey.pem -out privateKey_pkcs8.pem  -nocrypt
+```
+
+
 You can extract the public key from the certificate using one of the following :
 
 ```bash
 openssl.exe ec -in ECC_prime256v1.key -pubout -out ECC_prime256v1.pub
 ```
+
+OR
 
 ```bash
 openssl x509 -pubkey -noout -in ECC_prime256v1.cer
@@ -70,6 +79,8 @@ You can geneate a signature using:
 ```bash
 openssl dgst -sha256 -sign ECC_prime256v1.key -out sign.sha256 hello.txt
 ```
+
+> **Note**: The signature is generated in PEM format. (base64 of ASN.1 encoded r and s values). You might have to convert this into base64 encoded raw signatures (r|s format) depending on where you plan to use it. 
 
 And, verify with
 
