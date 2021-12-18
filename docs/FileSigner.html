@@ -18,6 +18,8 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" />
     <meta author="Vysakh P Pillai">
     <meta description="Tool to sign a file using ECC private key and webCrypto">
+    <meta icon="https://cdn.jsdelivr.net/gh/embeddedinn/embeddedinn.github.io@master/assets/images/favicon.ico">
+    <meta github="https://github.com/vppillai/cryptoScript">
 
     <script>
         //generate a key pair using webCrypto
@@ -295,8 +297,8 @@
                 </label>
                 <div class="fas fa-download btn text-success" style="float:right;"
                     onclick="downloadFile('privateKey','privateKey.pem')"> download</div>
-                <textarea id="privateKey" class="form-control" rows="5"
-                    placeholder="Paste or drag and dop your private key in PEM format here OR Click on 'Generate Key Pair'"
+                <textarea id="privateKey" class="form-control" rows="5" spellcheck="false"
+                    placeholder="Paste or drag and drop your private key in PEM format here OR Click on 'Generate Key Pair'"
                     style="resize: none; font-size: 12px; font-family: Consolas,monaco,monospace; "
                     ondragover="return false" ondrop="dropFile(event)"></textarea>
                 <small>For signing, only the private key is required</small><br>
@@ -308,16 +310,16 @@
                 </label>
                 <div class="fas fa-download btn text-success" style="float:right;"
                     onclick="downloadFile('publicKey','publicKey.pem')"> download</div>
-                <textarea id="publicKey" class="form-control" rows="5"
-                    placeholder="Paste your public key in PEM format here OR Click on 'Generate Key Pair'"
-                    style="resize: none; font-size: 12px; font-family: Consolas,monaco,monospace; "
+                <textarea id="publicKey" class="form-control" rows="5" spellcheck="false"
+                    placeholder="Paste or drag and drop your public key in PEM format here OR Click on 'Generate Key Pair'"
+                    style="resize: none; font-size: 12px; font-family: Consolas,monaco,monospace;"
                     ondragover="return false" ondrop="dropFile(event)"></textarea>
                 <small>For verification, only the public key is required</small>
             </div>
         </div>
         <div class="row mt-5">
             <div class="col-md-8">
-                <h3>Step 2: Sign or verify a file</h3>
+                <h3>Step 2: Sign or Verify a file</h3>
                 <hr>
                 <label for="fileToSign">Load file to sign / Verify</label><br>
                 <input type="file" class="form-control-file" id="fileToSign" onchange="handleFileSelect(event)">
@@ -327,7 +329,7 @@
         <div class="row mt-4" id="signatureMaterial">
             <div class="col-md-8">
                 <div>
-                    <textarea id="fileDetails" class="form-control"
+                    <textarea id="fileDetails" class="form-control" spellcheck="false"
                         style="font-size: 10px; resize: none; font-family: Consolas,monaco,monospace; " rows="4"
                         placeholder="File Details" readonly></textarea><br>
                 </div>
@@ -335,7 +337,7 @@
                         class="fas fa-signature"> Sign File</span></button>
             </div>
             <div class="col-md-4">
-                <textarea id="signature" class="form-control"
+                <textarea id="signature" class="form-control" spellcheck="false"
                     style="font-size: 10px; resize: none;font-family: Consolas,monaco,monospace; " rows="4"
                     placeholder="Signature in base64 encoded r|s format."></textarea>
                 <p></p>
