@@ -1,1 +1,0 @@
-Executables created with `python -m pyinstaller --onefile -w 'file.py'`
