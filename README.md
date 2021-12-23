@@ -39,7 +39,7 @@ Curves can be listed with `openssl ecparam --list_curves`
 The Above command generates a PKCS#1 key. To convert it into a more generic PKCS#8 key, use:
 
 ```bash
-openssl pkcs8 -in ECC_prime256v1.key -out ECC_prime256v1_pkcs8.pem  -nocrypt
+openssl pkcs8 -topk8 -in ECC_prime256v1.key -out ECC_prime256v1_pkcs8.key  -nocrypt
 ```
 
 
