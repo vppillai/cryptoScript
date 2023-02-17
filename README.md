@@ -21,6 +21,7 @@ Some of the items below are sample commands that can be issued with existing pro
 | [createCert.py](createCert.py)| Generate a self-signed certificate and key in PEM, DER and a C header file format.Can be used to spin up a local server for test. |
 | [httpsServer](httpsServer)    | A simple python script that can be used as a test HTTPs server                                                                    |
 | [ecdsaSign.py](ecdsaSign.py)  | A tool to generate and verify ECDSA signatures. Signatures are generated in raw (r|s) format and then base64 encoded.             |
+| [genEcdsaKey.py](genEcdsaKey.py)| Generate an ecdsa keypair and store them in PEM format                                                                          |
 
 
 # Commands and one-liners
