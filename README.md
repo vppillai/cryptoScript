@@ -14,17 +14,22 @@ This repo contains a bunch of quick and dirty scripts that were written to meet 
 
 Some of the items below are sample commands that can be issued with existing programs. 
 
-|  Script Name   |                                                             Function                                                              |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| [cert2header.py](cert2header.py)| Convert a certificate in PEM format into C header for use with embedded TLS stacks. Usage: `python cert2header.py rootCert.cer`     |
-| [cert2header_multi.py](cert2header_multi.py)| Similar to `cert2header.py` above, but accepts mulriple certificates as input.  Usage: `python cert2header.py CA1.cer CA2.cer CA3.cer`      |
-| [cert2header_chain.py](cert2header_chain.py)| Generate a PEM certificate chain C array. The script auto detects the certificate chain of the provided certificate from root and intermdiate certificates present in the `CA_dir` folder passed as the second argument to the script. Usage: `python cert2header_chain.py cert.cer CA_dir`     |
-| [key2header.py](key2header.py)| Convert a key in PEM format into C header for use with embedded TLS stacks. Usage: `python key2header.py privateKey.key`            |
-| [createCert.py](createCert.py)| Generate a self-signed certificate and key in PEM, DER and a C header file format.Can be used to spin up a local server for test. |
-| [httpsServer](httpsServer)    | A simple python script that can be used as a test HTTPs server                                                                    |
-| [ecdsaSign.py](ecdsaSign.py)  | A tool to generate and verify ECDSA signatures. Signatures are generated in raw (r|s) format and then base64 encoded.             |
-| [genEcdsaKey.py](genEcdsaKey.py)| Generate an ecdsa keypair and store them in PEM format                                                                          |
+| Script Name                                  | Function                                                                                                                                                                                                                                                                                    |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [cert2header.py](cert2header.py)             | Convert a certificate in PEM format into C header for use with embedded TLS stacks. Usage: `python cert2header.py rootCert.cer`                                                                                                                                                             |
+| [cert2header_multi.py](cert2header_multi.py) | Similar to `cert2header.py` above, but accepts mulriple certificates as input.  Usage: `python cert2header.py CA1.cer CA2.cer CA3.cer`                                                                                                                                                      |
+| [cert2header_chain.py](cert2header_chain.py) | Generate a PEM certificate chain C array. The script auto detects the certificate chain of the provided certificate from root and intermdiate certificates present in the `CA_dir` folder passed as the second argument to the script. Usage: `python cert2header_chain.py cert.cer CA_dir` |
+| [key2header.py](key2header.py)               | Convert a key in PEM format into C header for use with embedded TLS stacks. Usage: `python key2header.py privateKey.key`                                                                                                                                                                    |
+| [createCert.py](createCert.py)               | Generate a self-signed certificate and key in PEM, DER and a C header file format.Can be used to spin up a local server for test.                                                                                                                                                           |
+| [httpsServer](httpsServer)                   | A simple python script that can be used as a test HTTPs server                                                                                                                                                                                                                              |
+| [ecdsaSign.py](ecdsaSign.py)                 | A tool to generate and verify ECDSA signatures. Signatures are generated in raw (r                                                                                                                                                                                                          | s) format and then base64 encoded. |
+| [genEcdsaKey.py](genEcdsaKey.py)             | Generate an ecdsa keypair and store them in PEM format                                                                                                                                                                                                                                      |
 
+# Demo Scripts
+
+| Script Name                        | Function                                                                                                                                 |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| [ecdh_demo.py](demos/ecdh_demo.py) | A demo script to demonstrate ECDH key exchange and subsequent use of the shared secret to generate session keys for symmetric encryption |
 
 # Commands and one-liners
 
