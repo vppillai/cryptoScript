@@ -29,7 +29,7 @@ Some of the items below are sample commands that can be issued with existing pro
 
 | Script Name                        | Function                                                                                                                                 |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| [ecdh_demo.py](demos/ecdh_demo.py) | A demo script to demonstrate ECDH key exchange and subsequent use of the shared secret to generate session keys for symmetric encryption |
+| [ecdh_demo.py](demos/ecdh_demo.py) | A demo script to demonstrate ECDH key exchange and subsequent use of the shared secret to generate session keys for symmetric encryption </br> Readme with details: [ecdh_demo.md](demos/ecdh_demo.md) |
 
 # Commands and one-liners
 
