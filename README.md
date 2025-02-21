@@ -24,6 +24,7 @@ Some of the items below are sample commands that can be issued with existing pro
 | [httpsServer](httpsServer)                   | A simple python script that can be used as a test HTTPs server                                                                                                                                                                                                                              |
 | [ecdsaSign.py](ecdsaSign.py)                 | A tool to generate and verify ECDSA signatures. Signatures are generated in raw (r                                                                                                                                                                                                          | s) format and then base64 encoded. |
 | [genEcdsaKey.py](genEcdsaKey.py)             | Generate an ecdsa keypair and store them in PEM format                                                                                                                                                                                                                                      |
+| [fileCrypt.py](fileCrypt.py)                 | A script to encrypt and decrypt files with a hash header using a password string. uses AES256 |
 
 # Demo Scripts
 
